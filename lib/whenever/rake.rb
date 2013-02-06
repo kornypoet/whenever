@@ -45,7 +45,7 @@ module Whenever
     end
 
     def execute_command
-      Whenever::CommandLine.execute(write: true)
+      Whenever::CommandLine.execute(update: true)
     end
     
   end

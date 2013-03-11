@@ -17,8 +17,8 @@ module Whenever
     def initialize(*args, &task_block)
       @name = args.shift || default_taskname
       @verbose, @fail_on_error = true, true
-      @failure_message = nil
-
+      @failure_message, @user  = nil,  nil
+      
       desc(task_description)
 
       task name, *args do |t, task_args|
@@ -44,8 +44,13 @@ module Whenever
       'Use Whenever to install cron jobs'
     end
 
+    def base_opts
+      { update: true }
+    end
+
     def execute_command
-      Whenever::CommandLine.execute(update: true)
+      opts = base_opts.merge(user: user) unless user.nil?
+      Whenever::CommandLine.execute opts
     end
     
   end
@@ -60,8 +65,13 @@ module Whenever
       'Use Whenever to uninstall cron jobs'
     end
 
+    def base_opts
+      { clear: true }
+    end
+
     def execute_command
-      Whenever::CommandLine.execute(clear: true)
+      opts = base_opts.merge(user: user) unless user.nil?
+      Whenever::CommandLine.execute opts
     end
 
   end

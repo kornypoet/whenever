@@ -4,6 +4,7 @@ require 'active_support/all'
 module Whenever
   autoload :JobList,           'whenever/job_list'
   autoload :Job,               'whenever/job'
+  autoload :Api,               'whenever/api'
   autoload :CommandLine,       'whenever/command_line'
 
   module Output

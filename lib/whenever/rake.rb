@@ -1,4 +1,3 @@
-require 'whenever'
 require 'rake'
 require 'rake/tasklib'
 
@@ -12,7 +11,7 @@ module Whenever
   class RakeTask < ::Rake::TaskLib
     include ::Rake::DSL if defined?(::Rake::DSL)
 
-    attr_accessor :name, :verbose, :fail_on_error, :failure_message
+    attr_accessor :name, :verbose, :fail_on_error
 
     def initialize(*args, &task_block)
       @name = args.shift || default_taskname
@@ -25,11 +24,11 @@ module Whenever
         task_block.call(*[self, task_args].slice(0, task_block.arity)) if task_block
         begin
           # do something verbose if verbose
-          execute_command
+          success = system(command)
         rescue => e
           puts failure_message if failure_message
-          raise 'Whenever task failed' if fail_on_error
-        end        
+        end
+        raise 'Whenever task failed' if fail_on_error unless success        
       end
     end    
   end
@@ -44,13 +43,14 @@ module Whenever
       'Use Whenever to install cron jobs'
     end
 
-    def execute_command
-      Whenever::CommandLine.execute(write: true)
+    def command
+      
     end
-    
+
   end
 
   class UninstallTask < RakeTask
+
 
     def default_taskname
       'whenever:uninstall'
@@ -60,8 +60,8 @@ module Whenever
       'Use Whenever to uninstall cron jobs'
     end
 
-    def execute_command
-      Whenever::CommandLine.execute(clear: true)
+    def command
+      
     end
 
   end
